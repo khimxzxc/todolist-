@@ -6,6 +6,9 @@
 #include <FL/Fl_Group.H>
 #include <fstream>
 #include <string>
+#include <libgen.h>
+#include <unistd.h>
+#include <iostream>
 
 Fl_Input* task_input;
 Fl_Hold_Browser* task_list;
@@ -13,7 +16,28 @@ Fl_Button* add_btn;
 Fl_Button* del_btn;
 Fl_Group* main_group;
 
-const char* TASK_FILE = "tasks.txt";
+// Получение пути к папке с исполняемым файлом
+std::string get_executable_dir(const char* argv0) {
+#ifdef __APPLE__
+    char path[1024];
+    ssize_t len = readlink("/proc/self/exe", path, sizeof(path) - 1);
+    if (len != -1) {
+        path[len] = '\0';
+        return std::string(dirname(path));
+    }
+    // Fallback: использовать argv[0]
+    if (access(argv0, F_OK) == 0) {
+        char fullpath[1024];
+        realpath(argv0, fullpath);
+        return std::string(dirname(fullpath));
+    }
+#endif
+    return "."; // Текущая директория по умолчанию
+}
+
+// Определяем TASK_FILE как tasks.txt в папке с бинарником
+static std::string task_file_path;
+const char* TASK_FILE;
 
 // Добавление задачи
 void add_task(Fl_Widget*, void*) {
@@ -46,7 +70,10 @@ void load_tasks() {
 // Сохранение задач в файл
 void save_tasks() {
     std::ofstream file(TASK_FILE);
-    if (!file.is_open()) return;
+    if (!file.is_open()) {
+        std::cerr << "Не удалось открыть " << TASK_FILE << " для записи\n";
+        return;
+    }
     for (int i = 1; i <= task_list->size(); ++i) {
         const char* item = task_list->text(i);
         if (item) file << item << "\n";
@@ -54,6 +81,10 @@ void save_tasks() {
 }
 
 int main(int argc, char **argv) {
+    // Устанавливаем путь к TASK_FILE на основе расположения бинарника
+    task_file_path = get_executable_dir(argv[0]) + "/tasks.txt";
+    TASK_FILE = task_file_path.c_str();
+
     Fl_Window* window = new Fl_Window(400, 300, "Todo List");
 
     main_group = new Fl_Group(0, 0, 400, 300);
