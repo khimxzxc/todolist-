@@ -1,0 +1,6 @@
+/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S /Users/rakhimomirzak/Study/c++/todolist -B /Users/rakhimomirzak/Study/c++/todolist/cmake-build-debug
+-- Could NOT find X11 (missing: X11_X11_INCLUDE_PATH X11_X11_LIB) 
+-- Found FLTK: /usr/local/lib/libfltk_images.a;/usr/local/lib/libfltk_forms.a;/usr/local/lib/libfltk_gl.a;/Library/Developer/CommandLineTools/SDKs/MacOSX15.4.sdk/System/Library/Frameworks/OpenGL.framework;/usr/local/lib/libfltk.a
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/rakhimomirzak/Study/c++/todolist/cmake-build-debug

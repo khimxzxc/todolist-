@@ -1,0 +1,1 @@
+/usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/todolist.dir/main.cpp.o -o todolist   -L/Users/rakhimomirzak/Downloads/fltk-1.4.3/lib  -Wl,-rpath,/Users/rakhimomirzak/Downloads/fltk-1.4.3/lib -lfltk
